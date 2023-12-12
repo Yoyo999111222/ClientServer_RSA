@@ -1,6 +1,5 @@
 # ClientServer_RSA
 
-# ClientServer_DES
 <table>
     <tr>
         <th colspan=2>Keamanan Informasi D</th>
