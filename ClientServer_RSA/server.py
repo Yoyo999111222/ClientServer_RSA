@@ -2,6 +2,7 @@
 import socket
 import sys
 from _thread import *
+from rsa import *
 msgSz = 2048
 
 active_clients = list()
@@ -49,6 +50,9 @@ def handleClient(conn, addr):
     data = conn.recv(msgSz)
     data = data.decode('utf-8')
     pubKey = eval(data)
+
+    #print(f"Public Key of {addr[0]}: {pubKey}")
+    #print(f"Private Key of {addr[0]}: {prKey}")
 
     # send others public key to new client
     conn.send(str(public_keys_info).encode('utf-8'))
