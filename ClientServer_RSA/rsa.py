@@ -13,7 +13,6 @@ def gcd(x, y):
         x, y = y, x % y
     return abs(x)
 
-
 # list all possible public key
 for i in range(2, phi_n):
     if (gcd(i, phi_n) == 1):
@@ -69,7 +68,7 @@ def rsa_encrypt(message, pubKey):
 
 # rsa decryption
 def rsa_decrypt(message, prKey):
-    print(f"Decrypt {message}:")
+    print(f"Decrypt:")
     ct = message
     pt = str()
     ptList = []
