@@ -1,4 +1,3 @@
-
 import socket
 import sys
 from _thread import *
@@ -8,16 +7,22 @@ msgSz = 2048
 active_clients = list()
 public_keys_info = list()
 
-def delete(connection):
-    connection.close()
-    if(connection in active_clients):
-        active_clients.remove(connection)
-
 def deletePBKey(ip_address):
     for pubKey in public_keys_info:
-        if(pubKey['addr'] == ip_address):
-            print(f'Removing public key info for {ip_address}')
-            public_keys_info.delete(pubKey)
+        if pubKey['addr'] == ip_address:
+            #print(f'Removing public key info for {ip_address}')
+            public_keys_info.remove(pubKey)
+
+def delete(connection):
+    ip_address = connection.getpeername()[0]
+    connection.close()
+    
+    for client in active_clients:
+        if client['addr'] == ip_address:
+            active_clients.remove(client)
+            print(f"Client with IP {ip_address} disconnected")
+            deletePBKey(ip_address)
+            break
 
 def broadcast_msg(msg, sender_conn):
     for client in active_clients:
@@ -105,7 +110,9 @@ def handleClient(conn, addr):
                     delete(conn)
                     deletePBKey(addr[0])
         except Exception as e:
-            continue
+            delete(conn)  # Memanggil fungsi delete untuk menutup koneksi dan menghapus dari daftar
+            deletePBKey(addr[0])  # Jika perlu, tambahkan juga penghapusan kunci publik
+            break  # Keluar dari loop saat koneksi terputus
 
 if __name__ == '__main__':
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
